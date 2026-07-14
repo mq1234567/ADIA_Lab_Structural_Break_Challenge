@@ -1,0 +1,26 @@
+# Competition data (raw parquets — download separately, too large for GitHub)
+X_train.parquet
+X_test.reduced.parquet
+y_train.parquet
+y_train_index.parquet
+y_test.reduced.parquet
+y_test_index.reduced.parquet
+
+# Runtime mirrors used by the crunch submission harness
+submissions/data/
+submissions/prediction/
+submissions/.crunchdao/token
+
+# Editor / OS noise
+.obsidian/
+
+# Computed feature matrices (regenerate from experiments/run_final.py)
+experiments/feat_*.parquet
+experiments/*.parquet
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.DS_Store

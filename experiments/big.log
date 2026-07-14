@@ -1,0 +1,51 @@
+/Users/minqi/miniconda3/envs/structural-break/lib/python3.10/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names
+  warnings.warn(
+/Users/minqi/miniconda3/envs/structural-break/lib/python3.10/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names
+  warnings.warn(
+/Users/minqi/miniconda3/envs/structural-break/lib/python3.10/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names
+  warnings.warn(
+/Users/minqi/miniconda3/envs/structural-break/lib/python3.10/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names
+  warnings.warn(
+/Users/minqi/miniconda3/envs/structural-break/lib/python3.10/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names
+  warnings.warn(
+/Users/minqi/miniconda3/envs/structural-break/lib/python3.10/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names
+  warnings.warn(
+
+  300 series | 16s
+  600 series | 29s
+  900 series | 43s
+  1200 series | 56s
+  1500 series | 69s
+  1800 series | 83s
+  2100 series | 99s
+  2400 series | 113s
+  2700 series | 127s
+  3000 series | 144s
+  3300 series | 158s
+  3600 series | 172s
+  3900 series | 185s
+  4200 series | 199s
+  4500 series | 212s
+  4800 series | 226s
+  5100 series | 240s
+  5400 series | 254s
+  5700 series | 269s
+  6000 series | 282s
+  6300 series | 297s
+  6600 series | 311s
+  6900 series | 324s
+  7200 series | 338s
+  7500 series | 351s
+  7800 series | 365s
+  8100 series | 378s
+  8400 series | 391s
+  8700 series | 406s
+  9000 series | 420s
+  9300 series | 433s
+  9600 series | 447s
+  9900 series | 461s
+big train (subsample) written 466s
+BIG subsample-holdout: seed0 0.5640 | bag3 0.5617   (330-bank subsample 0.5773; full-res 0.6064)
+top 15 gain: {'cumsum_range': 178654.0, 'spectral_entropy': 78436.0, 'ref_log_n': 40395.0, 'ref_skew': 37556.0, 'rank_range_ratio': 32759.0, 'rollmean16_cov_vs_ref': 29256.0, 'ref_kurt': 29089.0, 'spectral_centroid': 28519.0, 'ref_autocorr': 27852.0, 'rank_range_vs_ref': 24785.0, 'rank_range': 21833.0, 'rollmean16_max_vs_ref': 20408.0, 'diff2_cov_vs_ref': 19849.0, 'diff_cov_vs_ref': 19529.0, 'diff2_cov': 19389.0}
+BIG reduced test bag3 = 0.5417   (330-bank 0.5695 / baseline 0.5719)
+

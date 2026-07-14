@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(conda env *)",
+      "Bash(conda run *)",
+      "Bash(cd /private/tmp/claude-501/-Users-minqi-Documents-ADIA-Lab-Structural-Break-Challenge/9b500dac-58d9-4b9a-abff-a80e33bf0e58/scratchpad && sed -i '' 's/feat_train_v3.parquet/feat_train_v4.parquet/' run_lgbm.py && conda run -n structural-break python -u run_lgbm.py v4_all 2>&1 | grep -v -i warn)",
+      "Bash(conda run -n structural-break python -u -c ' *)",
+      "Bash([ -s \"$SD/scratchpad/weight_exp2.log\" ])",
+      "Bash([ -s \"$SD/scratchpad/band_exp.log\" ])",
+      "Bash(break)",
+      "Bash(SD=/private/tmp/claude-501/-Users-minqi-Documents-ADIA-Lab-Structural-Break-Challenge/9b500dac-58d9-4b9a-abff-a80e33bf0e58/scratchpad; cp \"$SD\"/model_final_seed*.txt /Users/minqi/Documents/ADIA_Lab_Structural_Break_Challenge/experiments/ 2>/dev/null; ls -la /Users/minqi/Documents/ADIA_Lab_Structural_Break_Challenge/experiments/ | head -20)",
+      "WebFetch(domain:messy-plain-a65.notion.site)",
+      "WebFetch(domain:github.com)",
+      "Bash(python3 -)",
+      "mcp__claude_ai_Google_Drive__get_file_metadata",
+      "mcp__claude_ai_Google_Drive__download_file_content",
+      "WebFetch(domain:angry-sandal-e9b.notion.site)",
+      "Bash(cp __TRACKED_VAR__/alphabot_solution.txt __TRACKED_VAR__/alphabot_solution.pdf __TRACKED_VAR__/oracle_v2.py __TRACKED_VAR__/sb_features_v6.py __TRACKED_VAR__/run_v6.py /Users/minqi/Documents/ADIA_Lab_Structural_Break_Challenge/experiments/winners/)",
+      "Bash(cp __TRACKED_VAR__/oracle_v2.py __TRACKED_VAR__/sb_features_v6.py __TRACKED_VAR__/run_v6.py /Users/minqi/Documents/ADIA_Lab_Structural_Break_Challenge/experiments/)",
+      "Bash(grep -vE \"warn|feature names|^$\" /private/tmp/claude-501/-Users-minqi-Documents-ADIA-Lab-Structural-Break-Challenge/52a343c9-cbe3-430a-acff-49fd565c0653/tasks/bx08ueynd.output)"
+    ],
+    "additionalDirectories": [
+      "/private/tmp/claude-501/-Users-minqi-Documents-ADIA-Lab-Structural-Break-Challenge/9b500dac-58d9-4b9a-abff-a80e33bf0e58/scratchpad"
+    ]
+  }
+}

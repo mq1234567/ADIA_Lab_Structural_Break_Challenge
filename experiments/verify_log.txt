@@ -1,0 +1,5 @@
+loaded train/infer from notebook
+trained: 197530 rows, 30 feats, 6000 series
+train 324s -> ['model.joblib']
+INFER holdout[400] TS-AUC = 0.5834  (full-res, ~0.60 target)
+infer timing 1046.3 us/step -> 10M = 2.91 h (x1 core)

@@ -1,0 +1,25 @@
+name: structural-break
+channels:
+  - conda-forge
+dependencies:
+  # --- core / interpreter ---
+  - python=3.10
+  - pip
+
+  # --- data handling ---
+  - numpy
+  - pandas
+  - pyarrow          # read/write the .parquet data files
+
+  # --- stats & modeling (baselines + change-point detection) ---
+  - scipy            # KS / Mann-Whitney / CUSUM stats (missing from system python)
+  - scikit-learn     # ROC-AUC harness, logistic baselines, CV
+  - statsmodels      # AR / structural-break tests, spectral features
+  - lightgbm         # gradient-boosted per-timestep model
+
+  # --- exploration / viz ---
+  - matplotlib
+  - seaborn
+  - jupyterlab
+  - ipykernel        # register this env as a notebook kernel
+  - tqdm             # progress bars over 10k series
