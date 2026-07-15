@@ -50,24 +50,22 @@ def main():
     Xall = F.to_numpy(np.float32); del F; gc.collect()
 
     Fh = pd.read_parquet(FEAT_HOLD)[cols]
-    yh = y_full.reindex(Fh.index).to_numpy().astype(np.int8)
-    thh = C.true_step(Fh.index, y_full)
-    Xh = Fh.to_numpy(np.float32); del Fh; gc.collect()
+    yh = pd.Series(y_full.reindex(Fh.index).to_numpy().astype(np.int8), index=Fh.index)
+    Xh = Fh.to_numpy(np.float32); h_idx = Fh.index; del Fh; gc.collect()
 
     preds, imp = [], np.zeros(len(cols))
     for s in (0, 1, 2):
         m = lgb.LGBMClassifier(random_state=s, **PARAMS).fit(
             Xall[mtr], yv[mtr], sample_weight=wtr)
         m.booster_.save_model(os.path.join(HERE, f"model_seed{s}.txt"))
-        preds.append(m.predict_proba(Xh)[:, 1])
+        preds.append(pd.Series(m.predict_proba(Xh)[:, 1], index=h_idx))
         imp += m.booster_.feature_importance("gain")
 
     pd.Series(imp, index=cols).sort_values(ascending=False).to_csv(
         os.path.join(EXPERIMENTS, "final_gain_ranking.csv"))
+    bag_h = pd.Series(np.mean([C.rank01(p.to_numpy()) for p in preds], axis=0), index=h_idx)
     print("HOLDOUT (2000 series):  seed0 %.4f | bag3 %.4f" % (
-        C.ts_auc_arrays(preds[0], yh, thh),
-        C.ts_auc_arrays(np.mean([C.rank01(p) for p in preds], axis=0), yh, thh)),
-        flush=True)
+        C.ts_auc(preds[0], yh), C.ts_auc(bag_h, yh)), flush=True)
     del Xh; gc.collect()
 
     # reduced test uses ALL train series for fitting (paper-style final model)
@@ -77,9 +75,9 @@ def main():
     rp = [C.rank01(lgb.LGBMClassifier(random_state=s, **PARAMS)
                     .fit(Xall, yv, sample_weight=w_all)
                     .predict_proba(Xrr)[:, 1]) for s in (0, 1, 2)]
+    pred_r = pd.Series(np.mean(rp, axis=0), index=Fr.index)
     print("REDUCED (100 series, noisy):  bag3 = %.4f" %
-          C.ts_auc(pd.Series(np.mean(rp, axis=0), index=Fr.index),
-                   yr.reindex(Fr.index)), flush=True)
+          C.ts_auc(pred_r, yr.reindex(Fr.index)), flush=True)
 
 
 if __name__ == "__main__":

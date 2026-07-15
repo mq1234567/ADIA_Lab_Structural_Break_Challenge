@@ -11,9 +11,23 @@ from sklearn.metrics import roc_auc_score
 DATA = "/Users/minqi/Documents/ADIA_Lab_Structural_Break_Challenge"
 
 
-def ts_auc_arrays(p, y, t):
-    """TS-AUC from raw arrays: scores p, 0/1 labels y, per-row step index t."""
-    df = pd.DataFrame({"p": np.asarray(p), "y": np.asarray(y, np.int8), "t": np.asarray(t)})
+def ts_auc(pred, y_true):
+    """TS-AUC. Both `pred` and `y_true` are Series indexed by (id, time).
+
+    `pred` is aligned to `y_true` via reindex; the online-step strata are the
+    per-id cumcount of `y_true` after sorting by (id, time). Sorting makes the
+    result independent of the input order — safe against CV shuffles, mask
+    reordering, or predictions built in arbitrary order. All model predictions
+    should be built as (id, time)-indexed Series so scoring, alignment, and
+    debugging are uniform.
+    """
+    if not y_true.index.is_monotonic_increasing:
+        y_true = y_true.sort_index()
+        
+    p = pred.reindex(y_true.index).to_numpy()
+    y = y_true.to_numpy().astype(np.int8)
+    t = y_true.groupby(level="id").cumcount().to_numpy()
+    df = pd.DataFrame({"p": p, "y": y, "t": t})
     num = den = 0.0
     for _, g in df.groupby("t", sort=False):
         n_pos = int(g["y"].sum()); n_neg = len(g) - n_pos
@@ -23,14 +37,6 @@ def ts_auc_arrays(p, y, t):
         num += roc_auc_score(g["y"], g["p"]) * w
         den += w
     return num / den
-
-
-def ts_auc(pred, y_true):
-    """TS-AUC on Series indexed by (id, time). Step = per-id cumcount."""
-    p = pred.reindex(y_true.index).to_numpy()
-    y = y_true.to_numpy()
-    t = y_true.groupby(level="id").cumcount().to_numpy()
-    return ts_auc_arrays(p, y, t)
 
 
 def load_train():
@@ -68,8 +74,3 @@ def eq_series_weight(index):
     gs = pd.Series(1, index=index).groupby(level="id").transform("size").to_numpy()
     w = 1.0 / gs
     return w / w.mean()
-
-
-def true_step(index, y_full):
-    """True 0-based online step for each row (TS-AUC strata), from the full targets."""
-    return y_full.groupby(level="id").cumcount().reindex(index).to_numpy()
