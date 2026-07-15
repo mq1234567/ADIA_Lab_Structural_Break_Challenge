@@ -1,3 +1,0 @@
-BASELINE holdout 0.5793 (0.5793) | reduced 0.5130 (0.5764)  383s
-TUNED    holdout 0.5881 (0.5793) | reduced 0.4993 (0.5764)  2362s
-BLEND w=0.60  holdout-report 0.5963 -> 0.5969 (+0.0006) | reduced 0.4993 -> 0.5208 (+0.0215)

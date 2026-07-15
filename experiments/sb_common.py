@@ -1,71 +1,36 @@
-"""Shared harness for the ADIA structural-break experiments.
+"""Shared harness: TS-AUC metric + data loaders.
 
-ts_auc = the competition metric (Time-Stratified AUC): per online step t
-(cross-sectional across series alive at t), pair-count weighted average.
+TS-AUC (Time-Stratified AUC) = the competition metric. At each online step,
+take the cross-sectional AUC across the series alive at that step; then average
+across steps weighted by the pair count n_pos * n_neg.
 """
 import numpy as np
 import pandas as pd
+from sklearn.metrics import roc_auc_score
 
 DATA = "/Users/minqi/Documents/ADIA_Lab_Structural_Break_Challenge"
 
 
-def _auc_pair_stat(scores, y):
-    """(concordant pairs incl. 0.5*ties, n_pos*n_neg) within one stratum."""
-    y = np.asarray(y).astype(int)
-    scores = np.asarray(scores, dtype=float)
-    n_pos = int(y.sum())
-    n_neg = len(y) - n_pos
-    if n_pos == 0 or n_neg == 0:
-        return 0.0, 0.0
-    order = np.argsort(scores, kind="mergesort")
-    s = scores[order]
-    ranks = np.empty(len(scores))
-    i = 0
-    while i < len(s):
-        j = i
-        while j + 1 < len(s) and s[j + 1] == s[i]:
-            j += 1
-        ranks[order[i:j + 1]] = 0.5 * (i + j) + 1.0
-        i = j + 1
-    return float(ranks[y == 1].sum() - n_pos * (n_pos + 1) / 2.0), float(n_pos * n_neg)
+def ts_auc_arrays(p, y, t):
+    """TS-AUC from raw arrays: scores p, 0/1 labels y, per-row step index t."""
+    df = pd.DataFrame({"p": np.asarray(p), "y": np.asarray(y, np.int8), "t": np.asarray(t)})
+    num = den = 0.0
+    for _, g in df.groupby("t", sort=False):
+        n_pos = int(g["y"].sum()); n_neg = len(g) - n_pos
+        if n_pos == 0 or n_neg == 0:
+            continue
+        w = n_pos * n_neg
+        num += roc_auc_score(g["y"], g["p"]) * w
+        den += w
+    return num / den
 
 
 def ts_auc(pred, y_true):
-    """Time-Stratified AUC. pred, y_true: Series indexed by (id, time)."""
-    pred = pred.reindex(y_true.index)
+    """TS-AUC on Series indexed by (id, time). Step = per-id cumcount."""
+    p = pred.reindex(y_true.index).to_numpy()
+    y = y_true.to_numpy()
     t = y_true.groupby(level="id").cumcount().to_numpy()
-    y = y_true.to_numpy().astype(int)
-    p = pred.to_numpy()
-    order = np.argsort(t, kind="mergesort")
-    t, y, p = t[order], y[order], p[order]
-    num = den = 0.0
-    i = 0
-    while i < len(t):
-        j = i
-        while j + 1 < len(t) and t[j + 1] == t[i]:
-            j += 1
-        c, w = _auc_pair_stat(p[i:j + 1], y[i:j + 1])
-        num += c
-        den += w
-        i = j + 1
-    return num / den
-
-
-def ts_auc_arrays(p, y, t):
-    """Same metric from raw arrays (p: scores, y: 0/1, t: online step index)."""
-    order = np.argsort(t, kind="mergesort")
-    t, y, p = t[order], y[order], p[order]
-    num = den = 0.0
-    i = 0
-    while i < len(t):
-        j = i
-        while j + 1 < len(t) and t[j + 1] == t[i]:
-            j += 1
-        c, w = _auc_pair_stat(p[i:j + 1], y[i:j + 1])
-        num += c
-        den += w
-        i = j + 1
-    return num / den
+    return ts_auc_arrays(p, y, t)
 
 
 def load_train():
@@ -80,9 +45,31 @@ def load_reduced():
     return X, y
 
 
-def holdout_ids(all_ids, n_val=2000, seed=7):
-    """Fixed series-level split for fast experiment iteration."""
-    ids = np.unique(np.asarray(all_ids))
-    rng = np.random.default_rng(seed)
-    perm = rng.permutation(ids)
-    return np.sort(perm[n_val:]), np.sort(perm[:n_val])
+def load_bank(path=f"{DATA}/experiments/feat_final_train.parquet", cols=None):
+    """Read the cached feature bank -> (X float32 ndarray, MultiIndex, column list)."""
+    F = pd.read_parquet(path, columns=cols)
+    return F.to_numpy(np.float32), F.index, list(F.columns)
+
+
+def load_y():
+    """Full (id, time) online-step targets, for labels + TS-AUC step strata."""
+    return pd.read_parquet(f"{DATA}/y_train.parquet")["target"]
+
+
+# ---- modeling utilities -----------------------------------------------------
+
+def rank01(a):
+    """Map scores to [0, 1] ranks — used to average bag members before scoring."""
+    return np.argsort(np.argsort(a)) / (len(a) - 1.0)
+
+
+def eq_series_weight(index):
+    """1 / (#rows for the series), normalized to mean 1 — each SERIES counts equally."""
+    gs = pd.Series(1, index=index).groupby(level="id").transform("size").to_numpy()
+    w = 1.0 / gs
+    return w / w.mean()
+
+
+def true_step(index, y_full):
+    """True 0-based online step for each row (TS-AUC strata), from the full targets."""
+    return y_full.groupby(level="id").cumcount().reindex(index).to_numpy()

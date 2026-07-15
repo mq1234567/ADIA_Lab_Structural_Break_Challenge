@@ -13,7 +13,7 @@ import numpy as np, pandas as pd, time
 import lightgbm as lgb
 from sklearn.model_selection import cross_val_predict, KFold
 import sb_common as C
-from sb_common import _auc_pair_stat
+from sklearn.metrics import roc_auc_score
 
 
 def mid_u(sorted_arr, x):
@@ -265,16 +265,14 @@ def main():
             pred = cross_val_predict(m, dff[cols].to_numpy(np.float32), lab,
                                      cv=KFold(5, shuffle=True, random_state=0),
                                      method='predict_proba')[:, 1]
-            c, w = _auc_pair_stat(pred, lab)
-            print('%-18s | %-26s AUC = %.4f' % (feats_name, cfg_name, c / w))
+            print('%-18s | %-26s AUC = %.4f' % (feats_name, cfg_name, roc_auc_score(lab, pred)))
 
     # per-feature oracle AUC of new features
     print()
     new_cols = [c for c in df.columns if c not in old_cols]
     for c_ in new_cols:
         v = dff[c_].to_numpy()
-        cc, ww = _auc_pair_stat(np.abs(v - np.median(v)), lab)
-        print('  |%-18s| %.4f' % (c_, cc / ww))
+        print('  |%-18s| %.4f' % (c_, roc_auc_score(lab, np.abs(v - np.median(v)))))
 
 
 if __name__ == '__main__':

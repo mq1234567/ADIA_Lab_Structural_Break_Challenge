@@ -1,4 +1,0 @@
-loading train...
-train rows 155492 from 6000 series  197s  (30 feats)
-HOLDOUT(2000) stream TS-AUC = 0.6029   (batch-bank subsample 0.5793 / full-res ~0.606)
-infer timing: 135.0 us/step  -> 10M steps = 0.37 h (x1 core)

@@ -1,8 +1,0 @@
-bank (217978, 1072)
-baseline     cv 0.5724 +/- 0.0010  361s
-slow-lr      cv 0.5782 +/- 0.0035  1675s
-  delta +0.0058
-shallow-reg  cv 0.5767 +/- 0.0069  225s
-  delta +0.0043
-mid-lr       cv 0.5782 +/- 0.0062  601s
-  delta +0.0058

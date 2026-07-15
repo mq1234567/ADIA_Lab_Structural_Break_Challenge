@@ -13,6 +13,12 @@ submissions/.crunchdao/token
 
 # Editor / OS noise
 .obsidian/
+.claude/
+.DS_Store
+
+# Experiment logs (transient)
+experiments/*.log
+experiments/*_log.txt
 
 # Computed feature matrices (regenerate from experiments/run_final.py)
 experiments/feat_*.parquet
