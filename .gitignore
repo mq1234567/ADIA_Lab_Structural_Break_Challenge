@@ -30,3 +30,6 @@ __pycache__/
 *.egg-info/
 .ipynb_checkpoints/
 .DS_Store
+
+# Cached feature matrices (regenerate: experiments/models/cv_folds_by_series/build_cache.py)
+*.npz

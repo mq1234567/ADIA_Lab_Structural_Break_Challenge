@@ -1,0 +1,94 @@
+{
+  "base(d6,l3,it1500,lr.02)": {
+    "cat": 0.606610709558672,
+    "blend": 0.6076306537844866,
+    "cfg": {
+      "depth": 6,
+      "l2_leaf_reg": 3,
+      "iterations": 1500,
+      "learning_rate": 0.02
+    }
+  },
+  "d7": {
+    "cat": 0.6068814398399053,
+    "blend": 0.6072358905792985,
+    "cfg": {
+      "depth": 7,
+      "l2_leaf_reg": 3,
+      "iterations": 1500,
+      "learning_rate": 0.02
+    }
+  },
+  "d8": {
+    "cat": 0.6003186692770532,
+    "blend": 0.6040095350504496,
+    "cfg": {
+      "depth": 8,
+      "l2_leaf_reg": 3,
+      "iterations": 1500,
+      "learning_rate": 0.02
+    }
+  },
+  "d7_l6": {
+    "cat": 0.6075481150406523,
+    "blend": 0.6076466186979476,
+    "cfg": {
+      "depth": 7,
+      "l2_leaf_reg": 6,
+      "iterations": 1500,
+      "learning_rate": 0.02
+    }
+  },
+  "d7_l10": {
+    "cat": 0.6076343566463082,
+    "blend": 0.6075872693322473,
+    "cfg": {
+      "depth": 7,
+      "l2_leaf_reg": 10,
+      "iterations": 1500,
+      "learning_rate": 0.02
+    }
+  },
+  "d7_it3000_lr.01": {
+    "cat": 0.6060943992668362,
+    "blend": 0.6068233569329845,
+    "cfg": {
+      "depth": 7,
+      "l2_leaf_reg": 6,
+      "iterations": 3000,
+      "learning_rate": 0.01
+    }
+  },
+  "d7_it2500_lr.02": {
+    "cat": 0.607112547381036,
+    "blend": 0.6070400673330465,
+    "cfg": {
+      "depth": 7,
+      "l2_leaf_reg": 6,
+      "iterations": 2500,
+      "learning_rate": 0.02
+    }
+  },
+  "d7_border254": {
+    "cat": 0.6075481150406523,
+    "blend": 0.6076466186979476,
+    "cfg": {
+      "depth": 7,
+      "l2_leaf_reg": 6,
+      "iterations": 1500,
+      "learning_rate": 0.02,
+      "border_count": 254
+    }
+  },
+  "d7_rs2": {
+    "cat": 0.6065906062910582,
+    "blend": 0.6068230556193716,
+    "cfg": {
+      "depth": 7,
+      "l2_leaf_reg": 6,
+      "iterations": 1500,
+      "learning_rate": 0.02,
+      "random_strength": 2.0
+    }
+  }
+}
